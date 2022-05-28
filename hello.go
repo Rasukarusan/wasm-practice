@@ -1,9 +1,33 @@
+// +build js,wasm
+
 package main
 
-import "syscall/js"
+import (
+	"fmt"
+	"strings"
+	"syscall/js"
+)
+
+func say(this js.Value, args []js.Value) interface{} {
+	fmt.Println(args)
+	ss := []string{}
+	for _, jss := range args {
+		if s := jsString(jss); s != "" {
+			ss = append(ss, s)
+		}
+	}
+	return js.ValueOf("Hello, " + strings.Join(ss, ", "))
+}
+
+func jsString(j js.Value) string {
+	if j.IsUndefined() || j.IsNull() {
+		return ""
+	}
+	return j.String()
+}
 
 func main() {
 	ch := make(chan struct{})
-	js.Global().Get("document").Call("getElementById", "hello").Set("innerHTML", "Hello, World!")
+	js.Global().Set("say", js.FuncOf(say))
 	<-ch // Code must not finish
 }
