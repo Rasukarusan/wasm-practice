@@ -3,31 +3,40 @@
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
+	"strconv"
 	"strings"
 	"syscall/js"
 )
 
-func say(this js.Value, args []js.Value) interface{} {
-	fmt.Println(args)
-	ss := []string{}
-	for _, jss := range args {
-		if s := jsString(jss); s != "" {
-			ss = append(ss, s)
-		}
-	}
-	return js.ValueOf("Hello, " + strings.Join(ss, ", "))
+func mine(this js.Value, args []js.Value) interface{} {
+	n, _ := strconv.Atoi(args[0].String())
+	p := strings.Repeat("0", n)
+	c := proofOfWork(100, p)
+	js.Global().Get("document").Call("getElementById", "time").Set("innerHTML", "hoge")
+	return js.ValueOf(strconv.Itoa(c))
 }
 
-func jsString(j js.Value) string {
-	if j.IsUndefined() || j.IsNull() {
-		return ""
+func validProof(lastProof int, proof int, prefix string) bool {
+	guess := strconv.Itoa(lastProof) + strconv.Itoa(proof)
+	b := sha256.Sum256([]byte(guess))
+	h := hex.EncodeToString(b[:])
+	return strings.HasPrefix(h, prefix)
+}
+
+func proofOfWork(lastProof int, prefix string) int {
+	p := 0
+	for !validProof(lastProof, p, prefix) {
+		p++
 	}
-	return j.String()
+	return p
 }
 
 func main() {
 	ch := make(chan struct{})
-	js.Global().Set("say", js.FuncOf(say))
-	<-ch // Code must not finish
+	fmt.Println("wasm loaded!!")
+	js.Global().Set("mineByWasm", js.FuncOf(mine))
+	<-ch
 }
