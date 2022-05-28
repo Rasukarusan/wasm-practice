@@ -5,17 +5,54 @@
 <title>Hello</title>
 <script src="wasm_exec.js"></script>
 <script src="wasm.js"></script>
+<script type="text/javascript" src="sha256.js"></script>
+<script type="text/javascript" src="pow.js"></script>
 </head>
 
 <body>
-	<button id="button-wasm">wasm</button>
-	<p id="hello1"></p>
+  <div>
+    <form name="form">
+      Proof of Work の桁数:
+      <select name="pow">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4" selected>4</option>
+        <option value="5">5</option>
+      </select>
+    </form>
+  </div>
+  <button id="button-wasm">wasm</button>
+  <button id="button-js">javascript</button>
+  <p id="result"></p>
+  <p id="time"></p>
 </body>
 
 <script>
-	initWASM('hello.wasm');
-	document.getElementById('button-wasm').addEventListener('click', event => {
-		document.getElementById("hello1").innerHTML = global.say("Alice", "Bob", "Chris");
-	});
+  initWASM('hello.wasm');
+  function getSelectValue() {
+    const pow = document.form.pow;
+    const i = pow.selectedIndex;
+    return pow.options[i].value;
+  }
+
+  document.getElementById('button-wasm').addEventListener('click', event => {
+    setTimeout(() => {
+      const value = getSelectValue()
+      const result = global.mineByWasm(value)
+      console.log(result)
+      document.getElementById("result").innerHTML = '試行回数: ' + result
+    }, 1)
+    document.getElementById("result").innerHTML = "mining..."
+  });
+
+  document.getElementById('button-js').addEventListener('click', event => {
+    setTimeout(() => {
+      const value = getSelectValue()
+      const result = mineByJs(value)
+      document.getElementById("result").innerHTML = '試行回数: ' + result
+    }, 1)
+    document.getElementById("result").innerHTML = "mining..."
+  });
 </script>
 </html>
