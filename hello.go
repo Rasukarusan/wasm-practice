@@ -9,13 +9,15 @@ import (
 	"strconv"
 	"strings"
 	"syscall/js"
+	"time"
 )
 
 func mine(this js.Value, args []js.Value) interface{} {
 	n, _ := strconv.Atoi(args[0].String())
 	p := strings.Repeat("0", n)
+	now := time.Now()
 	c := proofOfWork(100, p)
-	js.Global().Get("document").Call("getElementById", "time").Set("innerHTML", "hoge")
+	js.Global().Get("document").Call("getElementById", "time").Set("innerHTML", time.Since(now).String())
 	return js.ValueOf(strconv.Itoa(c))
 }
 
