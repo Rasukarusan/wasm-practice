@@ -19,11 +19,13 @@
         <option value="3">3</option>
         <option value="4" selected>4</option>
         <option value="5">5</option>
+        <option value="6">6</option>
       </select>
     </form>
   </div>
   <button id="button-wasm">wasm</button>
   <button id="button-js">javascript</button>
+  <p id="hash"></p>
   <p id="result"></p>
   <p id="time"></p>
 </body>
@@ -46,6 +48,7 @@
         document.getElementById('result').innerHTML = '試行回数: ' + result
       }, 1)
       document.getElementById('result').innerHTML = 'mining...'
+      document.getElementById('hash').innerHTML = ''
       document.getElementById('time').innerHTML = ''
     })
   })

@@ -25,7 +25,11 @@ func validProof(lastProof int, proof int, prefix string) bool {
 	guess := strconv.Itoa(lastProof) + strconv.Itoa(proof)
 	b := sha256.Sum256([]byte(guess))
 	h := hex.EncodeToString(b[:])
-	return strings.HasPrefix(h, prefix)
+	isValid := strings.HasPrefix(h, prefix)
+	if isValid {
+		js.Global().Get("document").Call("getElementById", "hash").Set("innerHTML", h)
+	}
+	return isValid
 }
 
 func proofOfWork(lastProof int, prefix string) int {

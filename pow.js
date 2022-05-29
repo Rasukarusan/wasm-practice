@@ -3,7 +3,11 @@ function validProof(lastProof, proof, prefix) {
   const shaObj = new jsSHA("SHA-256", "TEXT", { encoding: "UTF8" });
   shaObj.update(guess);
   const hash = shaObj.getHash("HEX");
-  return hash.startsWith(prefix)
+  const isValid = hash.startsWith(prefix)
+  if (isValid) {
+    document.getElementById("hash").innerHTML = hash
+  }
+  return isValid
 }
 
 function proofOfWork(lastProof, prefix) {
