@@ -1,5 +1,16 @@
 # Golang Wasm Practice
 
+## Requirement
+
+```bash
+$ go version
+go version go1.16.2 darwin/arm64
+```
+
+```bash
+go get -u github.com/shurcooL/goexec
+```
+
 ## Build
 
 Go
@@ -16,5 +27,6 @@ tinygo build -o hello.wasm -target wasm ./hello.go
 ## Run
 
 ```bash
-go run main.go
+goexec 'http.ListenAndServe(`:9000`, http.FileServer(http.Dir(`.`)))'
+open http://localhost:9000
 ```
