@@ -36,23 +36,18 @@
     return pow.options[i].value;
   }
 
-  document.getElementById('button-wasm').addEventListener('click', event => {
-    setTimeout(() => {
-      const value = getSelectValue()
-      const result = global.mineByWasm(value)
-      console.log(result)
-      document.getElementById("result").innerHTML = '試行回数: ' + result
-    }, 1)
-    document.getElementById("result").innerHTML = "mining..."
-  });
-
-  document.getElementById('button-js').addEventListener('click', event => {
-    setTimeout(() => {
-      const value = getSelectValue()
-      const result = mineByJs(value)
-      document.getElementById("result").innerHTML = '試行回数: ' + result
-    }, 1)
-    document.getElementById("result").innerHTML = "mining..."
-  });
+  document.querySelectorAll('button').forEach(function(button) {
+    button.addEventListener('click', event => {
+      const id = event.target.id
+      setTimeout(() => {
+        const value = getSelectValue()
+        const result = id === 'button-wasm' ? global.mineByWasm(value) : mineByJs(value)
+        console.log(result)
+        document.getElementById('result').innerHTML = '試行回数: ' + result
+      }, 1)
+      document.getElementById('result').innerHTML = 'mining...'
+      document.getElementById('time').innerHTML = ''
+    })
+  })
 </script>
 </html>
