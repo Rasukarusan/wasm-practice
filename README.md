@@ -14,14 +14,16 @@ go get -u github.com/shurcooL/goexec
 ## Build
 
 Go
+
 ```bash
 cp $(go env GOROOT)/misc/wasm/wasm_exec.js ./
-GOOS=js GOARCH=wasm go build -o hello.wasm hello.go
+GOOS=js GOARCH=wasm go build -o mine.wasm -trimpath
 ```
 
 [Tinygo](https://tinygo.org/)
+
 ```bash
-tinygo build -o hello.wasm -target wasm ./hello.go
+tinygo build -o mine.wasm -target wasm ./mine.go
 ```
 
 ## Run
