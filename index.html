@@ -6,7 +6,7 @@
 <script src="wasm_exec.js"></script>
 <script src="wasm.js"></script>
 <script type="text/javascript" src="sha256.js"></script>
-<script type="text/javascript" src="pow.js"></script>
+<script type="text/javascript" src="mine.js"></script>
 </head>
 
 <body>
@@ -31,7 +31,7 @@
 </body>
 
 <script>
-  initWASM('hello.wasm');
+  initWASM('mine.wasm');
   function getSelectValue() {
     const pow = document.form.pow;
     const i = pow.selectedIndex;
@@ -44,7 +44,6 @@
       setTimeout(() => {
         const value = getSelectValue()
         const result = id === 'button-wasm' ? global.mineByWasm(value) : mineByJs(value)
-        console.log(result)
         document.getElementById('result').innerHTML = '試行回数: ' + result
       }, 1)
       document.getElementById('result').innerHTML = 'mining...'
