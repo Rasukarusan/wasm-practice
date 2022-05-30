@@ -36,3 +36,7 @@ tinygo build -o mine.wasm -target wasm ./mine.go
 goexec 'http.ListenAndServe(`:9000`, http.FileServer(http.Dir(`.`)))'
 open http://localhost:9000
 ```
+
+## Thanks
+
+https://text.baldanders.info/golang/webassembly-with-tinygo/
